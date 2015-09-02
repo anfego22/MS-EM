@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <Eigen/Dense>
+#include "Eigen/Dense"
 #include <stdexcept>
 #include <iostream>
 #include <thread>
@@ -15,10 +15,12 @@ using namespace std;
 
 class Model {
 public:
-	int N, lagY;
+	int N, Nm, lagY;
 	bool sigma, beta, meanCorrected;
 	Model(const int &, const int &, const int &,
 		  const bool &, const bool &, const bool &);
+	// N is the original number of regimes
+	// Nm is N^{m+1} ficticial regimes
 };
 
 class Data {
@@ -31,10 +33,12 @@ public:
 };
 
 class Transitions{
-	MatrixXd F, rho;
+	int N, Nm; 
+	MatrixXd P, F, rho;
 	Transition(const Model &);
-	void updateF(const MatrixXd & ,const MatrixXd & );
-	void updateRho(const MatrixXd & ,const MatrixXd & );
+	void createF();
+	void updateF(const MatrixXd & ,const MatrixXd &, const MatrixXd & );
+	void updateRho(const MatrixXd & ,const MatrixXd &, const MatrixXd &);
 };
 
 class linearParams{
