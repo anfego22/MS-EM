@@ -3,13 +3,16 @@
 Model::Model(const int &N_, const int &lagsS_, const int &lagsY_,
 			 const bool &sigma_, const bool &beta_,
 			 const bool &meanCorrected):
-	N(N_), lagsS(lagsS_), lagsY(lagsY_), sigma(sigma_), beta(beta_),
-	meanCorrected(meanCorrected){}
+	N(N_), lagsY(lagsY_), sigma(sigma_),
+	beta(beta_), meanCorrected(meanCorrected){
+	if (meanCorrected == TRUE)
+		Nm = std::pow(N, lagsY + 1);
+}
 
-Model::Model(const int &N_ = 2, const int &lagsS_= 0,
-			 const int &lagsY_= 0, const bool &sigma_ = TRUE,
-			 const bool &beta_ = TRUE, const bool &meanCorrected):
-	N(N_), lagsS(lagsS_), lagsY(lagsY_), sigma(sigma_), beta(beta_),
+Model::Model(const int &N_ = 2, const int &lagsY_= 0,
+			 const bool &sigma_ = TRUE, const bool &beta_ = TRUE,
+			 const bool &meanCorrected = FALSE):
+	N(N_), lagsY(lagsY_), sigma(sigma_), beta(beta_),
 	meanCorrected(meanCorrected){}
 
 Data::Data(const MatrixXd & y,const MatrixXd & x):
