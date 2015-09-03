@@ -8,21 +8,25 @@ using boost::math::normal;
 using namespace std;
 
 
+// Static members should be initialize as:
+// and static function?
+mt19937 randomNb::rng;
+
 randomNb::randomNb(){
-	boost::random::mt19937 rng(time(0))
+	rng.seed(time(NULL));
 }
 
 double randomNb::sampleCauchy(double c){
-  boost::random::cauchy_distribution <> nd(c, 1);
-  return nd(rng);
+	cauchy_distribution <> nd(c, 1);
+	return nd(randomNb::rng);
 }
 
 double randomNb::sampleChiSqr(int c){
-  boost::random::chi_squared_distribution <> nd(c);
-  return nd(rng);
+	chi_squared_distribution <> nd(c);
+  return nd(randomNb::rng);
 }
 
 double randomNb::sampleUniform(double c){
-  boost::random::uniform_real_distribution <> nd(0, 1);
-  return nd(rng);
+	uniform_real_distribution <> nd(0, 1);
+  return nd(randomNb::rng);
 }

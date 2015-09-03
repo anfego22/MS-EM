@@ -7,12 +7,15 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random.hpp>
 
+using boost::random::mt19937;
+
 class randomNb{
-	boost::random::mt19937 rng;
+public:
+	static mt19937 rng;
 	randomNb();
-	double sampleCauchy();
-	double sampleChiSqr();
-	double sampleUniform();
+	static double sampleCauchy(double);
+	static double sampleChiSqr(int);
+	static double sampleUniform(double);
 };
 
 

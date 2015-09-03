@@ -42,8 +42,10 @@ class Transitions{
 };
 
 class linearParams{
-	MatrixXd beta, sigma;
-	linearParams(const Model &);
+	vector<MatrixXd> beta, sigma;
+	linearParams(const Model &, const Data &);
+	void createB();
+	void createS();
 	void update();
 	void updateBetaS(); // Update if beta has switching
 	void updateBetaNS(); // Update if beta has no switching
