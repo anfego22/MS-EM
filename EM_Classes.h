@@ -15,6 +15,7 @@ class Model {
 public:
 	int N, Nm, lagsY;
 	bool sigma, beta, meanCorrected;
+	Model();
 	Model(const int &, const int &, const bool &,
 		  const bool &, const bool &);
 	// N is the original number of regimes
@@ -31,6 +32,7 @@ public:
 };
 
 class Transitions{
+public:
 	int N, Nm; 
 	MatrixXd P, F;
 	VectorXd rho;
@@ -43,6 +45,7 @@ class Transitions{
 };
 
 class linearParams{
+public:
 	const Data  &data;
 	const Model &model;
 	vector<MatrixXd> beta, sigma;
@@ -57,10 +60,11 @@ class linearParams{
 };
 
 class Parameters{
+public:
 	Transitions rhoF;
 	linearParams betaSigma;
 	// M -> Number of dependent variables (dimensions of Y)
-	Parameters(const Model &model, const int & M);
+	Parameters(const Model &, const Data &);
 };
 
 class Errors {

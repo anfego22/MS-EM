@@ -1,5 +1,8 @@
 #include "EM_Classes.h"
 
+Model::Model():N(2), Nm(2), lagsY(0), sigma(true), beta(true),
+			   meanCorrected(false){}
+
 Model::Model(const int &N_ = 2, const int &lagsY_= 0,
 			 const bool &sigma_ = true, const bool &beta_ = true,
 			 const bool &meanCorrected = false):
@@ -8,6 +11,8 @@ Model::Model(const int &N_ = 2, const int &lagsY_= 0,
 	if (meanCorrected)
 		Nm = std::pow(N, lagsY + 1);
 	}
+
+
 
 Data::Data(const MatrixXd & y,const MatrixXd & x):
 	Y(y){
@@ -20,12 +25,12 @@ Data::Data(const MatrixXd & y,const MatrixXd & x):
 		mX = x.cols();
 		X.setZero(T, mX+1);
 		X.col(0) = MatrixXd::Ones(T, 0);
-		X.rightCols(mX-1) = x;
+		X.rightCols(mX-2) = x;
 	} else {
 		mX = x.rows();
 		X.setZero(T, mX+1);
 		X.col(0) = MatrixXd::Ones(T, 0);
-		X.rightCols(mX-1) = x.transpose();
+		X.rightCols(mX-2) = x.transpose();
 	}
 }
 
@@ -35,6 +40,6 @@ Data::Data(const MatrixXd & y):
 		Y.transposeInPlace();
 	T = Y.rows();
 	M = Y.cols();
-	X.setOnes(T, 0);
+	X.setOnes(T, 1);
 	mX = 1;
 }

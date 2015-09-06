@@ -34,8 +34,9 @@ void Transitions::createRho(){
 	MatrixXd A(Nm+1, Nm);
 	MatrixXd I;
 	I.setIdentity(Nm+1, Nm+1);
-	A.topRows(Nm-1) = (I - F);
-	A.row(Nm) = MatrixXd::Ones(0, Nm);
+	A.setZero(Nm+1, Nm);
+	A.topRows(Nm) = MatrixXd::Identity(Nm, Nm) - F;
+	A.row(Nm) = VectorXd::Ones(Nm);
 	rho = (A.transpose()*A).ldlt().solve(A.transpose()*I.col(Nm));
 }
 
@@ -80,7 +81,6 @@ void linearParams::createS(){
 		Sig = Sig.unaryExpr(std::ptr_fun(rnb.varCovRg));
 		Sig.triangularView<Eigen::Lower>() = Sig.triangularView<Eigen::Upper>().transpose();
 		sigma.push_back(Sig);
-		cout << sigma[i] << endl;
 	}
 }
 
@@ -109,3 +109,6 @@ linearParams::linearParams(const Model &model,
 	createS();
 	createB();
 }
+
+Parameters::Parameters(const Model &model,
+					   const Data &data): rhoF(model), betaSigma(model, data){}
