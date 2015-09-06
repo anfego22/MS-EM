@@ -3,11 +3,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <fstream>
 #include "Eigen/Dense"
-#include <stdexcept>
 #include <iostream>
-#include <thread>
+
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
@@ -32,6 +30,9 @@ public:
 	Data(const MatrixXd & );
 };
 
+class Xi;
+
+
 class Transitions{
 	int N, Nm; 
 	MatrixXd P, F, rho;
@@ -42,6 +43,8 @@ class Transitions{
 };
 
 class linearParams{
+	const Data  &data;
+	const Model &model;
 	vector<MatrixXd> beta, sigma;
 	linearParams(const Model &, const Data &);
 	void createB();
@@ -57,7 +60,7 @@ class Parameters{
 	Transition rhoF;
 	linearParams betaSigma;
 	// M -> Number of dependent variables (dimensions of Y)
-	Parameters(const Model &model, const int & M,);
+	Parameters(const Model &model, const int & M);
 };
 
 class Errors {

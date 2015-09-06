@@ -60,3 +60,47 @@ Transitions::Transitions(const Model &model): N(model.N), Nm(model.Nm){
 	createF();
 	createRho();
 }
+
+void linearParams::createS(){
+	if (model.sigma == TRUE)
+		int N = model.N;
+	else
+		int N = 1;
+	
+	int M = data.Y.ncols();
+	MatrixXd Sig;
+	randomNb rnb;
+	sigma.reserve(N);
+	for (int i = 0; i <N; i++){
+		Sig.setIdentity(M,M)*=M;
+		Sig = Sig.unaryExpr(std::ptr_fun(rnb.varCovRg));
+		Sig.triangularView<Eigen::Lower>() = Sig.triangularView<Eigen::Upper>().transpose();
+		sigma.push_back(Sig);
+		cout << sigma[i] << endl;
+	}
+}
+
+
+void linearParams::createB(){
+	int N;
+	if (model.Beta == TRUE)
+		N = model.N;
+	else
+		N = 1;
+	// The concatenated phi coefficients in a single matrix
+	// plus the intercept term
+	int mM = M*Nm;
+	beta.reserve(N);
+	MatrixXd Be;
+	for (int i = 0; i<N; i++){
+		Be.setRandom(M,mM);
+		Be.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
+		beta.push_back(Be);
+	}
+}
+
+linearParams::linearParams(const Model &model,
+						   const Data &data): data(data), model(model){
+	createS();
+	createB();
+}
