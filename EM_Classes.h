@@ -70,7 +70,7 @@ public:
 
 class Errors {
 	MatrixXd eta;
-	Errors(const Data &d, const Model &model, const Parameters &param); 
+	Errors(const Parameters &param); 
 };
 
 class Xi {

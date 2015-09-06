@@ -6,7 +6,7 @@ using Eigen::MatrixXd;
 
 
 int main(){
-	Model myModel(3);
+	Model myModel(3, 1, true, true, true);
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
 	
@@ -28,6 +28,10 @@ int main(){
 
 	Parameters myParam(myModel, myData);
 	cout << "Take a look at sigma" << endl;
+	cout << "This is F" << endl;
+	cout << myParam.rhoF.F << endl << endl;
+	
+	cout << "Take a look at sigma" << endl;
 	for (int i = 0; i< myModel.N; i++){
 		cout << myParam.betaSigma.sigma[i] << endl;
 		cout << endl;
@@ -38,7 +42,6 @@ int main(){
 		cout << myParam.betaSigma.beta[i] << endl;
 		cout << endl;
 	}
-
-	
 	
 }
+

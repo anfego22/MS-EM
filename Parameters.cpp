@@ -12,15 +12,20 @@ void Transitions::createF(){
 		P.col(i) = P.col(i)/normTerm(i);
 	}
 	if (model.meanCorrected){
-		MatrixXd Fi(Nm, N);
-		Fi.setZero(Nm, N);
-		for(unsigned int i = 0, j = 0;
-			i < N; i++, j+=N){
-			Fi.col(i).segment(j, N) = P.col(i);
-		}
-		for (unsigned int i = 0; i<Nm; i+=N){
-			F.block(0,i,Nm,N) = Fi;
-		}
+		int i = 0,jj = 0,j = 0;
+		while(jj < Nm){
+		F.col(jj).segment(j, N) = P.col(i);
+		if (i >= N-1)
+			i = 0;
+		else
+			i++;
+		if (j < Nm-N)
+			j +=N;
+		else
+			j = 0;
+		jj++;
+	}
+
 	} else
 		F = P;
 }
