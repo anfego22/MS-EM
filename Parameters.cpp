@@ -11,7 +11,7 @@ void Transitions::createF(){
 	for (int i = 0; i <= N - 1; i++){
 		P.col(i) = P.col(i)/normTerm(i);
 	}
-	if (Nm != N){
+	if (model.meanCorrected){
 		MatrixXd Fi(Nm, N);
 		Fi.setZero(Nm, N);
 		for(unsigned int i = 0, j = 0;
@@ -61,7 +61,9 @@ void Transitions::updateRho(const MatrixXd & XiS){
 
 
 
-Transitions::Transitions(const Model &model): N(model.N), Nm(model.Nm){
+Transitions::Transitions(const Model &model): model(model){
+	N = model.N;
+	Nm = model.Nm;
 	createF();
 	createRho();
 }

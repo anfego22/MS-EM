@@ -15,9 +15,9 @@ class Model {
 public:
 	int N, Nm, lagsY;
 	bool sigma, beta, meanCorrected;
-	Model();
-	Model(const int &, const int &, const bool &,
-		  const bool &, const bool &);
+	Model(const int &N_ = 2, const int &lagsY_= 0,
+		  const bool &sigma_ = true, const bool &beta_ = true,
+		  const bool &meanCorrected = false);
 	// N is the original number of regimes
 	// Nm is N^{m+1} ficticial regimes
 };
@@ -33,6 +33,7 @@ public:
 
 class Transitions{
 public:
+	const Model &model;
 	int N, Nm; 
 	MatrixXd P, F;
 	VectorXd rho;

@@ -6,16 +6,20 @@ using Eigen::MatrixXd;
 
 
 int main(){
-	Model myModel;
+	Model myModel(3);
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
-
-	Eigen::Matrix<double, 2, 10> Y;
+	
+	Eigen::Matrix<double, 2, 10> Y, X;
 	Y.setRandom();
-
-	Data myData(Y);
+	X.setRandom();
+	
+	Data myData(Y, X);
 	cout << "This is Y" << endl;
 	cout << Y << endl;
+	cout << "This is X" << endl;
+	cout << X << endl;
+	
 	cout << "This is Y from the Data class" << endl;
 	cout << myData.Y << endl;
 
