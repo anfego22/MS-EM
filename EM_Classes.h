@@ -13,10 +13,10 @@ using namespace std;
 
 class Model {
 public:
-	int N, Nm, lagY;
+	int N, Nm, lagsY;
 	bool sigma, beta, meanCorrected;
-	Model(const int &, const int &, const int &,
-		  const bool &, const bool &, const bool &);
+	Model(const int &, const int &, const bool &,
+		  const bool &, const bool &);
 	// N is the original number of regimes
 	// Nm is N^{m+1} ficticial regimes
 };
@@ -24,22 +24,22 @@ public:
 class Data {
 public:
 	MatrixXd Y, X;
-	double T, mX;
+	double T, mX, M;
 	Data(const MatrixXd & ,
 		 const MatrixXd & );
 	Data(const MatrixXd & );
 };
 
-class Xi;
-
-
 class Transitions{
 	int N, Nm; 
-	MatrixXd P, F, rho;
-	Transition(const Model &);
+	MatrixXd P, F;
+	VectorXd rho;
+	Transitions(const Model &);
 	void createF();
-	void updateF(const MatrixXd & ,const MatrixXd &, const MatrixXd & );
-	void updateRho(const MatrixXd & ,const MatrixXd &, const MatrixXd &);
+	void createRho();
+	void updateF(const MatrixXd & ,const MatrixXd &,
+				 const MatrixXd &);
+	void updateRho(const MatrixXd &);
 };
 
 class linearParams{
@@ -54,10 +54,10 @@ class linearParams{
 	void updateBetaNS(); // Update if beta has no switching
 	void updateSigmaS(); // Update if sigma has switching
 	void updateSigmaNS(); // Update if sigma has no switching
-}
+};
 
 class Parameters{
-	Transition rhoF;
+	Transitions rhoF;
 	linearParams betaSigma;
 	// M -> Number of dependent variables (dimensions of Y)
 	Parameters(const Model &model, const int & M);
@@ -91,4 +91,3 @@ public:
 };
 
 #endif
-

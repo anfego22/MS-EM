@@ -26,21 +26,23 @@ void Transitions::createF(){
 }
 
 // rho = (A'A)^{-1}A'e
+// dim -> 
 // Since A'A is positive semidefinite matrix we use ldlt method of matrix
 
 void Transitions::createRho(){
 	rho.setZero(Nm);
-	MatrixXd A(Nm+1, Nm+1);
+	MatrixXd A(Nm+1, Nm);
 	MatrixXd I;
-	I.setIdentity(Nm, Nm);
-	A << (I - F), MatrixXd::setOnes(0,d);
-	rho = (A.transpose()*A).ldlt.solve(A.transpos()*I.col(Nm));
+	I.setIdentity(Nm+1, Nm+1);
+	A.topRows(Nm-1) = (I - F);
+	A.row(Nm) = MatrixXd::Ones(0, Nm);
+	rho = (A.transpose()*A).ldlt().solve(A.transpose()*I.col(Nm));
 }
 
 // updateF needs the smooth probabilities
-void Transitions::updateF(const MatrixXd & Xtt, const MatrixXd & Xt1t,
-						  const MatrixXd & XiS, const int &T,
-						  const int & N){
+void Transitions::updateF(const MatrixXd & Xitt, const MatrixXd & Xit1t, const MatrixXd & XiS){
+	int T = XiS.cols();
+	MatrixXd xS, xtt_lag1, xS_lag1, xt1t;
 	for(unsigned int j = 0; j < Nm; ++j){
 		for(unsigned int i = 0;  i < Nm; ++i){
 			xS = XiS.row(j).tail(T - 1);
@@ -53,8 +55,10 @@ void Transitions::updateF(const MatrixXd & Xtt, const MatrixXd & Xt1t,
 }
 
 void Transitions::updateRho(const MatrixXd & XiS){
-	rho = Xis.row(0);
+	rho = XiS.row(0);
 }
+
+
 
 Transitions::Transitions(const Model &model): N(model.N), Nm(model.Nm){
 	createF();
@@ -62,12 +66,12 @@ Transitions::Transitions(const Model &model): N(model.N), Nm(model.Nm){
 }
 
 void linearParams::createS(){
-	if (model.sigma == TRUE)
-		int N = model.N;
+	int N;
+	if (model.sigma)
+		N = model.N;
 	else
-		int N = 1;
-	
-	int M = data.Y.ncols();
+		N = 1;
+	int M = data.Y.cols();
 	MatrixXd Sig;
 	randomNb rnb;
 	sigma.reserve(N);
@@ -80,18 +84,19 @@ void linearParams::createS(){
 	}
 }
 
-
 void linearParams::createB(){
 	int N;
-	if (model.Beta == TRUE)
+	if (model.beta)
 		N = model.N;
 	else
 		N = 1;
 	// The concatenated phi coefficients in a single matrix
 	// plus the intercept term
-	int mM = M*Nm;
+	int M = data.Y.cols();
+	int mM = M*model.Nm;
 	beta.reserve(N);
 	MatrixXd Be;
+	randomNb rnb;
 	for (int i = 0; i<N; i++){
 		Be.setRandom(M,mM);
 		Be.unaryExpr(std::ptr_fun(rnb.sampleCauchy));

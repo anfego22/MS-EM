@@ -1,17 +1,20 @@
-#ifndef EMCLASSES_H
-#define EMCLASSES_H
-#include <boost/math/distributions/cauchy.hpp>
-#include <boost/math/distributions/normal.hpp>
-#include <boost/math/distributions/uniform.hpp>
-#include <boost/math/distributions/chi_squared.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random.hpp>
+#ifndef RNCLASS_H
+#define RNCLASS_H
 
-using boost::random::mt19937;
+#include <boost/random/cauchy_distribution.hpp>
+#include <boost/random/uniform_real_distribution.hpp>
+#include <boost/random/chi_squared_distribution.hpp>
+#include <boost/random/mersenne_twister.hpp>
+
+
+using boost::random::cauchy_distribution;
+using boost::random::chi_squared_distribution;
+using boost::random::uniform_real_distribution;
 
 class randomNb{
 public:
-	static mt19937 rng;
+
+	static boost::random::mt19937 rng;
 	randomNb();
 	static double sampleCauchy(double);
 	static double sampleChiSqr(int);
