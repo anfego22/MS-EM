@@ -16,6 +16,7 @@ public:
 	static double sampleCauchy(double);
 	static double sampleChiSqr(int);
 	static double sampleUniform(double);
+	static double varCovRg(double);
 };
 
 

@@ -23,10 +23,19 @@ double randomNb::sampleCauchy(double c){
 
 double randomNb::sampleChiSqr(int c){
 	chi_squared_distribution <> nd(c);
-  return nd(randomNb::rng);
+	return nd(randomNb::rng);
 }
 
 double randomNb::sampleUniform(double c){
 	uniform_real_distribution <> nd(0, 1);
   return nd(randomNb::rng);
+}
+
+double randomNb::varCovRg(double c){
+	if (c == 0){
+		return randomNb::sampleCauchy(c);
+	}
+	else{
+		return randomNb::sampleChiSqr(c);
+	}
 }
