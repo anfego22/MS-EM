@@ -99,13 +99,12 @@ void linearParams::createB(){
 		N = 1;
 	// The concatenated phi coefficients in a single matrix
 	// plus the intercept term
-	int M = data.Y.cols();
-	int mM = M*model.Nm;
+	int betaM = data.M*(model.lagsY+data.mX)+1;
 	beta.reserve(N);
 	MatrixXd Be;
 	randomNb rnb;
 	for (int i = 0; i<N; i++){
-		Be.setRandom(M,mM);
+		Be.setRandom(data.M,betaM);
 		Be.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
 		beta.push_back(Be);
 	}
