@@ -5,11 +5,14 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/random/chi_squared_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
-
+#include <Eigen/Dense>
+#include <cmath>
 
 using boost::random::cauchy_distribution;
 using boost::random::chi_squared_distribution;
 using boost::random::uniform_real_distribution;
+using Eigen::MatrixXd;
+
 
 class randomNb{
 public:
@@ -22,6 +25,8 @@ public:
 	static double varCovRg(double);
 };
 
-
+double multivariateNormal_density(const MatrixXd &,
+								  const MatrixXd &,
+								  const MatrixXd &);
 
 #endif

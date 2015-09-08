@@ -44,6 +44,11 @@ int main(){
 		cout << myParam.betaSigma.beta[i] << endl;
 		cout << endl;
 	}
-	
+
+	MatrixXd x(2, 1), c(2, 1), S(2,2);
+	S << 1, .7, .7, 1;
+	c.setZero(2, 1);
+	x.setZero(2, 1);
+	cout << multivariateNormal_density(x, c, S) << endl;
 }
 

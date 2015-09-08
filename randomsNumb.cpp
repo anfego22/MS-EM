@@ -32,3 +32,19 @@ double randomNb::varCovRg(double c){
 		return randomNb::sampleChiSqr(c);
 	}
 }
+
+
+double multivariateNormal_density(const MatrixXd &x,
+	const MatrixXd &Mu, const MatrixXd &Sigma){
+	double expTerm, o;
+	using namespace std;
+	MatrixXd err;
+	if ( x.cols() != 1)
+		cerr << "X must be a column vector" << endl;
+	if ( Mu.cols() != 1)
+		cerr << "Mu must be a column vector" << endl;
+	err = x - Mu;
+	expTerm = exp((err.transpose()*Sigma.inverse()*err)(0,0));
+	o = 1/sqrt(pow(2*M_PI, Mu.rows())*Sigma.determinant());
+	return o*expTerm;
+}

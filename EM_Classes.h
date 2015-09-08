@@ -69,11 +69,13 @@ public:
 };
 
 class Errors {
+public:
 	MatrixXd eta;
 	Errors(const Parameters &param); 
 };
 
 class Xi {
+public:
 	MatrixXd Xitt, Xit1t, XiS;
 	Xi(const Errors &, const Parameters &);
 	void filterProb(const Errors &, const Parameters &);
