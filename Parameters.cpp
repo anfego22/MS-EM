@@ -92,24 +92,29 @@ void linearParams::createS(){
 }
 
 void linearParams::createB(){
-	int N;
-	if (model.beta)
-		N = model.N;
-	else
-		N = 1;
+	int Ny, Nx;
+	Ny = (model.betaY == true)? model.N:1;
+	Nx = (model.betaX == true)? model.N:1;
 	// The concatenated phi coefficients in a single matrix
 	// plus the intercept term
-	int betaM = data.M*(model.lagsY+data.mX)+1;
-	beta.reserve(N);
-	MatrixXd Be;
+	int betaLags = data.M*(model.lagsY)+1;
+	betaY.reserve(Ny);
+	betaX.reserve(Nx);
+	MatrixXd beY, beX;		
 	randomNb rnb;
-	for (int i = 0; i<N; i++){
-		Be.setRandom(data.M,betaM);
-		Be.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
-		beta.push_back(Be);
+	for (int i = 0; i<Ny; i++){
+		beY.setRandom(data.M,betaLags);
+		beY.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
+		betaY.push_back(beY);
+	}
+	for (int i = 0; i<Nx; i++){
+		beX.setRandom(data.M, data.k);
+		beX.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
+		betaX.push_back(beX);
 	}
 }
 
+	
 linearParams::linearParams(const Model &model,
 						   const Data &data): data(data), model(model){
 	createS();
@@ -117,4 +122,4 @@ linearParams::linearParams(const Model &model,
 }
 
 Parameters::Parameters(const Model &model,
-					   const Data &data): rhoF(model), betaSigma(model, data){}
+					   const Data &data): rhoF(model), betaSigma(model, data), model(model), data(data){}

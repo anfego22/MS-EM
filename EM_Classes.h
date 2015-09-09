@@ -14,9 +14,10 @@ using namespace std;
 class Model {
 public:
 	int N, Nm, lagsY;
-	bool sigma, beta, meanCorrected;
+	bool sigma, betaY, betaX, meanCorrected;
 	Model(const int &N_ = 2, const int &lagsY_= 0,
-		  const bool &sigma_ = true, const bool &beta_ = true,
+		  const bool &sigma_ = true, const bool &betaY_ = true,
+		  const bool &betaX_ = true,
 		  const bool &meanCorrected = false);
 	// N is the original number of regimes
 	// Nm is N^{m+1} ficticial regimes
@@ -25,10 +26,12 @@ public:
 class Data {
 public:
 	MatrixXd Y, X;
-	double T, mX, M;
+	double T, k, M;
 	Data(const MatrixXd & ,
 		 const MatrixXd & );
 	Data(const MatrixXd & );
+	void embed(MatrixXd *,
+				const MatrixXd &,int);
 };
 
 class Transitions{
@@ -49,7 +52,7 @@ class linearParams{
 public:
 	const Data  &data;
 	const Model &model;
-	vector<MatrixXd> beta, sigma;
+	vector<MatrixXd> betaY, betaX, sigma;
 	linearParams(const Model &, const Data &);
 	void createB();
 	void createS();
@@ -62,16 +65,25 @@ public:
 
 class Parameters{
 public:
+	const Model &model;
+	const Data &data;
 	Transitions rhoF;
 	linearParams betaSigma;
 	// M -> Number of dependent variables (dimensions of Y)
 	Parameters(const Model &, const Data &);
 };
 
+
+// Errors needs the structure of the design matrix
+// needs Y_{t-1:t-m} X
+
 class Errors {
 public:
-	MatrixXd eta;
-	Errors(const Parameters &param); 
+	int T, Nm;
+	const Parameters & param;
+	MatrixXd eta, Y, Yt1, X;
+	Errors(const Parameters &param);
+	void designMatrix();
 };
 
 class Xi {
