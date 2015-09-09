@@ -1,15 +1,12 @@
 #include "EM_Classes.h"
 
 Model::Model(const int &N_, const int &lagsY_,
-			 const bool &sigma_, const bool &beta_,
-			 const bool &meanCorrected):
-	N(N_), lagsY(lagsY_), sigma(sigma_), beta(beta_),
-	meanCorrected(meanCorrected){
-	Nm = std::pow(N, lagsY + 1);
+			 const bool &sigma_, const bool &betaY_,
+			 const bool &betaX_, const bool &meanCorrected):
+	N(N_), lagsY(lagsY_), sigma(sigma_), betaY(betaY_),
+	betaX(betaX_), meanCorrected(meanCorrected){
+	Nm = (meanCorrected == true) ? std::pow(N, lagsY + 1):N;
 	}
-	
-
-
 
 Data::Data(const MatrixXd & y,const MatrixXd & x):
 	Y(y){
@@ -19,15 +16,13 @@ Data::Data(const MatrixXd & y,const MatrixXd & x):
 	M = Y.cols(); // if M = 1, Univariate model
 	// T can't be different from x.rows()
 	if (x.rows() > x.cols()){
-		mX = x.cols();
-		X.setZero(T, mX+1);
-		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(mX) = x;
+		k = x.cols();		   
+		X.setZero(T, k+1);
+		X.rightCols(k) = x;
 	} else {
-		mX = x.rows();
-		X.setZero(T, mX+1);
-		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(mX) = x.transpose();
+		k = x.rows();
+		X.setZero(T, k+1);
+		X.rightCols(k) = x.transpose();
 	}
 }
 
@@ -38,5 +33,16 @@ Data::Data(const MatrixXd & y):
 	T = Y.rows();
 	M = Y.cols();
 	X.setOnes(T, 1);
-	mX = 1;
+	k = 1;
+}
+
+void Data::embed(MatrixXd *Result, const MatrixXd &Y,
+				  int m){
+	m+=1;
+	MatrixXd ytm(Y.rows()-m, Y.cols());
+	Result->resize(Y.rows()-m, Y.cols()*m);
+	for (int i = 0; i<m; i++){
+		ytm = Y.block(i, 0, Y.rows() - m, Y.cols());
+		Result->block(0, (m-1-i)*Y.cols(), Y.rows() - m, Y.cols()) = ytm;
+	}
 }
