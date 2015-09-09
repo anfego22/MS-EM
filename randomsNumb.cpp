@@ -39,12 +39,12 @@ double multivariateNormal_density(const MatrixXd &x,
 	double expTerm, o;
 	using namespace std;
 	MatrixXd err;
-	if ( x.cols() != 1)
-		cerr << "X must be a column vector" << endl;
-	if ( Mu.cols() != 1)
-		cerr << "Mu must be a column vector" << endl;
+	if ( x.rows() != 1)
+		cerr << "X must be a row vector" << endl;
+	if ( Mu.rows() != 1)
+		cerr << "Mu must be a row vector" << endl;
 	err = x - Mu;
-	expTerm = exp((err.transpose()*Sigma.inverse()*err)(0,0));
+	expTerm = exp((err*Sigma.inverse()*err.transpose())(0,0));
 	o = 1/sqrt(pow(2*M_PI, Mu.rows())*Sigma.determinant());
 	return o*expTerm;
 }
