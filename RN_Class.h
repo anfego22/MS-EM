@@ -12,7 +12,7 @@ using boost::random::cauchy_distribution;
 using boost::random::chi_squared_distribution;
 using boost::random::uniform_real_distribution;
 using Eigen::MatrixXd;
-
+using Eigen::VectorXd;
 
 class randomNb{
 public:
@@ -26,6 +26,11 @@ public:
 };
 
 double multivariateNormal_density(const MatrixXd &,
+								  const MatrixXd &,
+								  const MatrixXd &);
+
+void multivariateNormal_density(const VectorXd *,
+								  const MatrixXd &,
 								  const MatrixXd &,
 								  const MatrixXd &);
 
