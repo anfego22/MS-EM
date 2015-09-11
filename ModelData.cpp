@@ -18,15 +18,15 @@ Data::Data(const MatrixXd & y,const MatrixXd & x):
 	M = Y.cols(); // if M = 1, Univariate model
 	// T can't be different from x.rows()
 	if (x.rows() > x.cols()){
-		k = x.cols();		   
-		X.setZero(T, k+1);
+		k = x.cols()+1;		   
+		X.setZero(T, k);
 		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(k) = x;
+		X.rightCols(k-1) = x;
 	} else {
-		k = x.rows();
-		X.setZero(T, k+1);
+		k = x.rows()+1;
+		X.setZero(T, k);
 		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(k) = x.transpose();
+		X.rightCols(k-1) = x.transpose();
 	}
 }
 
@@ -36,7 +36,8 @@ Data::Data(const MatrixXd & y):
 		Y.transposeInPlace();
 	T = Y.rows();
 	M = Y.cols();
-	k = 0;
+	k = 1;
+	X.setOnes(T, k);
 }
 
 void Data::embed(MatrixXd *Result, const MatrixXd &Y,
