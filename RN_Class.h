@@ -29,9 +29,9 @@ double multivariateNormal_density(const MatrixXd &,
 								  const MatrixXd &,
 								  const MatrixXd &);
 
-void multivariateNormal_density(const VectorXd *,
-								  const MatrixXd &,
-								  const MatrixXd &,
-								  const MatrixXd &);
+void multivariateNormal_density(VectorXd &,
+								const MatrixXd &,
+								const MatrixXd &,
+								const MatrixXd &);
 
 #endif

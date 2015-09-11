@@ -48,8 +48,9 @@ double multivariateNormal_density(const MatrixXd &x,
 
 void multivariateNormal_density(VectorXd &res,const MatrixXd &x,
 	const MatrixXd &Mu, const MatrixXd &Sigma){
+	res.setZero(x.rows());
 	for(int i = 0; i<x.rows(); i++){
-		res(i) = multivariateNormal_density(x.row(i), Mu.row(i),
+		res.row(i) = multivariateNormal_density(x.row(i), Mu.row(i),
 											  Sigma);
 	}
 }
