@@ -25,7 +25,6 @@ void Transitions::createF(){
 			j = 0;
 		jj++;
 	}
-
 	} else
 		F = P;
 }
@@ -92,26 +91,30 @@ void linearParams::createS(){
 }
 
 void linearParams::createB(){
+	
 	int Ny, Nx;
 	Ny = (model.betaY == true)? model.N:1;
 	Nx = (model.betaX == true)? model.N:1;
 	// The concatenated phi coefficients in a single matrix
 	// plus the intercept term
-	int betaLags = data.M*(model.lagsY)+1;
+	int betaLags = data.M*(model.lagsY);
 	betaY.reserve(Ny);
 	betaX.reserve(Nx);
 	MatrixXd beY, beX;		
 	randomNb rnb;
+	
 	for (int i = 0; i<Ny; i++){
 		beY.setRandom(data.M,betaLags);
 		beY.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
 		betaY.push_back(beY);
 	}
+	
 	for (int i = 0; i<Nx; i++){
 		beX.setRandom(data.M, data.k);
 		beX.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
 		betaX.push_back(beX);
 	}
+	
 }
 
 	

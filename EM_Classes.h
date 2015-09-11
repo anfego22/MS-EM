@@ -13,11 +13,11 @@ using namespace std;
 
 class Model {
 public:
-	int N, Nm, lagsY;
+	int N, Nm, lagsY, lagsX;
 	bool sigma, betaY, betaX, meanCorrected;
 	Model(const int &N_ = 2, const int &lagsY_= 0,
-		  const bool &sigma_ = true, const bool &betaY_ = true,
-		  const bool &betaX_ = true,
+		  const int &lagsX_ = 0,const bool &sigma_ = true,
+		  const bool &betaY_ = true, const bool &betaX_ = true,
 		  const bool &meanCorrected = false);
 	// N is the original number of regimes
 	// Nm is N^{m+1} ficticial regimes

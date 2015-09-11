@@ -1,9 +1,11 @@
 #include "EM_Classes.h"
 
 Model::Model(const int &N_, const int &lagsY_,
+			 const int &lagsX_,
 			 const bool &sigma_, const bool &betaY_,
 			 const bool &betaX_, const bool &meanCorrected):
-	N(N_), lagsY(lagsY_), sigma(sigma_), betaY(betaY_),
+	N(N_), lagsY(lagsY_), lagsX(lagsX_),
+	sigma(sigma_), betaY(betaY_),
 	betaX(betaX_), meanCorrected(meanCorrected){
 	Nm = (meanCorrected == true) ? std::pow(N, lagsY + 1):N;
 	}
@@ -17,12 +19,14 @@ Data::Data(const MatrixXd & y,const MatrixXd & x):
 	// T can't be different from x.rows()
 	if (x.rows() > x.cols()){
 		k = x.cols();		   
-		X.setZero(T, k);
-		X = x;
+		X.setZero(T, k+1);
+		X.col(0) = MatrixXd::Ones(T, 1);
+		X.rightCols(k) = x;
 	} else {
 		k = x.rows();
-		X.setZero(T, k);
-		X = x.transpose();
+		X.setZero(T, k+1);
+		X.col(0) = MatrixXd::Ones(T, 1);
+		X.rightCols(k) = x.transpose();
 	}
 }
 
