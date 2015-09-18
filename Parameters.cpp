@@ -74,20 +74,24 @@ Transitions::Transitions(const Model &model): model(model){
 
 void linearParams::createS(){
 	int N;
+
 	if (model.sigma)
 		N = model.N;
 	else
 		N = 1;
+
 	int M = data.Y.cols();
 	MatrixXd Sig;
 	randomNb rnb;
 	sigma.reserve(N);
+
 	for (int i = 0; i <N; i++){
 		Sig.setIdentity(M,M)*=M;
 		Sig = Sig.unaryExpr(std::ptr_fun(rnb.varCovRg));
 		Sig.triangularView<Eigen::Lower>() = Sig.triangularView<Eigen::Upper>().transpose();
 		sigma.push_back(Sig);
 	}
+	
 }
 
 void linearParams::createB(){
@@ -108,15 +112,21 @@ void linearParams::createB(){
 		beY.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
 		betaY.push_back(beY);
 	}
-	
-	for (int i = 0; i<Nx; i++){
-		beX.setRandom(data.M, data.k);
-		beX.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
-		betaX.push_back(beX);
+	if(data.k){
+		for (int i = 0; i<Nx; i++){
+			beX.setRandom(data.M, data.k);
+			beX.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
+			betaX.push_back(beX);
+		}
+		
 	}
-	
+
 }
 
+void linearParams::createMu(){
+	MatrixXd mu;
+	mu.setRandom(model.N, data.M);
+}
 	
 linearParams::linearParams(const Model &model,
 						   const Data &data): data(data), model(model){
@@ -125,4 +135,4 @@ linearParams::linearParams(const Model &model,
 }
 
 Parameters::Parameters(const Model &model,
-					   const Data &data): rhoF(model), betaSigma(model, data), model(model), data(data){}
+					   const Data &data): rhoF(model), lin(model, data), model(model), data(data){}

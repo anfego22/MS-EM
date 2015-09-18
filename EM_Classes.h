@@ -21,17 +21,18 @@ public:
 		  const bool &meanCorrected = false);
 	// N is the original number of regimes
 	// Nm is N^{m+1} ficticial regimes
+	// N = Nm only if meanCorrected = false
 };
 
 class Data {
 public:
 	MatrixXd Y, X;
-	double T, k, M;
+	int T, k, M;
 	Data(const MatrixXd & ,
 		 const MatrixXd & );
 	Data(const MatrixXd & );
-	void embed(MatrixXd *,
-				const MatrixXd &,int);
+	void embed(MatrixXd &,
+			   const MatrixXd &,int);
 };
 
 class Transitions{
@@ -53,9 +54,11 @@ public:
 	const Data  &data;
 	const Model &model;
 	vector<MatrixXd> betaY, betaX, sigma;
+	MatrixXd mu;
 	linearParams(const Model &, const Data &);
 	void createB();
 	void createS();
+	void createMu();
 	void update();
 	void updateBetaS(); // Update if beta has switching
 	void updateBetaNS(); // Update if beta has no switching
@@ -68,22 +71,23 @@ public:
 	const Model &model;
 	const Data &data;
 	Transitions rhoF;
-	linearParams betaSigma;
+	linearParams lin;
 	// M -> Number of dependent variables (dimensions of Y)
 	Parameters(const Model &, const Data &);
 };
 
-
-// Errors needs the structure of the design matrix
-// needs Y_{t-1:t-m} X
-
 class Errors {
 public:
 	int T, Nm;
-	const Parameters & param;
-	MatrixXd eta, Y, Yt1, X;
+	const Model &model;
+	const Model &data;
+	const Parameters &param;
+	MatrixXd eta, Y, Yt1, X, means;
 	Errors(const Parameters &param);
 	void designMatrix();
+	int permFun(const int &, int ,
+				const int &);
+	void meansF();
 };
 
 class Xi {

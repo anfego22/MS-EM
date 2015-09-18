@@ -18,15 +18,13 @@ Data::Data(const MatrixXd & y,const MatrixXd & x):
 	M = Y.cols(); // if M = 1, Univariate model
 	// T can't be different from x.rows()
 	if (x.rows() > x.cols()){
-		k = x.cols()+1;		   
+		k = x.cols();		   
 		X.setZero(T, k);
-		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(k-1) = x;
+		X = x;
 	} else {
-		k = x.rows()+1;
+		k = x.rows();
 		X.setZero(T, k);
-		X.col(0) = MatrixXd::Ones(T, 1);
-		X.rightCols(k-1) = x.transpose();
+		X = x.transpose();
 	}
 }
 
@@ -36,16 +34,16 @@ Data::Data(const MatrixXd & y):
 		Y.transposeInPlace();
 	T = Y.rows();
 	M = Y.cols();
-	k = 1;
-	X.setOnes(T, k);
+	k = 0;
 }
 
-void Data::embed(MatrixXd *Result, const MatrixXd &Y,
+void Data::embed(MatrixXd &Result, const MatrixXd &Y,
 				  int m){
+	const int M = Y.cols();
 	MatrixXd ytm(Y.rows()-m, Y.cols());
-	Result->resize(Y.rows()-m, Y.cols()*(m+1));
+	Result.resize(Y.rows()-m, Y.cols()*(m+1));
 	for (int i = 0; i<=m; i++){
 		ytm = Y.block(i, 0, Y.rows() - m, Y.cols());
-		Result->middleCols((m-i)*Y.cols(), Y.cols()) = ytm;
+		Result.middleCols((m-i)*M, M) = ytm;
 	}
 }
