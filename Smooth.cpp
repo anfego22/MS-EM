@@ -28,9 +28,10 @@ void Errors::meansF(){
 			sel0 = permFun(model.N, i, 0);
 			for (int j = 0; j < model.lagsY; j++){
 				sel = permFun(model.N, i, j);
-				muJ.middleRows(j*data.M, data.M) = param.lin.
-					mu.row(sel).transpose();
+				muJ.middleRows(j*data.M, data.M) =
+					param.lin.mu.row(sel).transpose();
 			}
+
 			Phi << MatrixXd::Identity(data.M, data.M),
 				param.lin.betaY[sel0];
 			means.row(i) = (Phi*muJ).transpose();
@@ -60,17 +61,18 @@ Errors::Errors(const Parameters &param):param(param),
 	designMatrix();
 	meansF();
 	eta.setZero(model.Nm, T);		   
-	eta.col(0) = param.rhoF.rho;
+	// 
 	MatrixXd MuJ;
-	MuJ.setZero(data.M, 1);
-
 	for (int j = 0, i = 0; j < model.Nm; j++, i++){
 		if(i >= model.N)
 			i = 0;
-		MuJ = Yt1t*param.lin.betaY[i].transpose()
-			+ X*param.lin.betaX[i].transpose()
-			+ means.row(j).transpose();
 
+		MuJ = Yt1t*param.lin.betaY[i].transpose()
+			+ X*param.lin.betaX[i].transpose();
+		for(int h = 0; h < MuJ.rows(); h++){
+			MuJ.row(h) += means.row(j);
+		}
+		
 		eta.row(j) = multivariateNormal_density(Y, MuJ,
 												param.lin.sigma[i]);
 	}

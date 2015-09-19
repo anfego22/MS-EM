@@ -124,7 +124,6 @@ void linearParams::createB(){
 }
 
 void linearParams::createMu(){
-	MatrixXd mu;
 	mu.setRandom(model.N, data.M);
 }
 	
@@ -132,6 +131,7 @@ linearParams::linearParams(const Model &model,
 						   const Data &data): data(data), model(model){
 	createS();
 	createB();
+	createMu();
 }
 
 Parameters::Parameters(const Model &model,

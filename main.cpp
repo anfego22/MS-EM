@@ -6,12 +6,12 @@ using Eigen::MatrixXd;
 
 
 int main(){
-	int lagsY = 3;
+	int lagsY = 2;
 	int lagsX = 0;
-	Model myModel(2, lagsY, lagsX, true, true, true, false);
+	Model myModel(2, lagsY, lagsX, true, true, true, true);
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
-	Eigen::Matrix<double, 3, 10> Y;
+	Eigen::Matrix<double, 2, 10> Y;
 	Eigen::Matrix<double, 2, 10> X;
 	Y.setRandom();
 	X.setRandom();
@@ -55,6 +55,10 @@ int main(){
 	embed(resX, myData.X, lagsX);
 	cout << "What happend if we embed a matrix with 0" << endl;
 	cout << resX << endl;
+
+	Errors err(myParam);
+	cout << "This is eta" << endl;
+	cout << err.eta << endl;
 
 
 	
