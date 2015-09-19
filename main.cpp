@@ -7,10 +7,12 @@ using Eigen::MatrixXd;
 
 int main(){
 	int lagsY = 3;
-	Model myModel(2, lagsY, 0, true, true, true, false);
+	int lagsX = 0;
+	Model myModel(2, lagsY, lagsX, true, true, true, false);
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
-	Eigen::Matrix<double, 2, 10> Y, X;
+	Eigen::Matrix<double, 3, 10> Y;
+	Eigen::Matrix<double, 2, 10> X;
 	Y.setRandom();
 	X.setRandom();
 	Data myData(Y, X);
@@ -22,6 +24,7 @@ int main(){
 	cout << myData.Y << endl;
 	cout << "And X from the Data class" << endl;
 	cout << myData.X << endl;
+
 	Parameters myParam(myModel, myData);
 	cout << "Take a look at rho" << endl;
 	cout << myParam.rhoF.rho << endl;
@@ -45,18 +48,23 @@ int main(){
 	}
 	cout << "Take a look at the design matrix" << endl;
 	cout << "Y_t\t" << "Y_{t-1}\t\t" << endl;
-	MatrixXd res, MuJ;
-	myData.embed(res, myData.Y, lagsY);
-	cout << res << endl;
+
+	MatrixXd resY, resX, MuJ;
+	embed(resY, myData.Y, lagsY);
+	cout << resY << endl;
+	embed(resX, myData.X, lagsX);
+	cout << "What happend if we embed a matrix with 0" << endl;
+	cout << resX << endl;
+
 	MatrixXd &SigmaJ = myParam.lin.sigma[0];
 	MatrixXd &beta1 = myParam.lin.betaY[0];
-	VectorXd etaRow;
-	MuJ = res.rightCols(res.cols() - myData.Y.cols())*beta1.transpose();
+	MatrixXd etaRow;
+	MuJ = resY.rightCols(resY.cols() - myData.Y.cols())*beta1.transpose(); 
 	cout << "MuJ*Yt1t" <<endl;
 	cout << MuJ << endl;
-	etaRow.setZero(res.rows());
+	etaRow.setZero(1, resY.rows());
 	multivariateNormal_density(etaRow,
-							   res.leftCols(myData.Y.cols()),
+							   resY.leftCols(myData.Y.cols()),
 							   MuJ, SigmaJ);
 	cout << "This is the first row of eta" << endl;
 	cout << etaRow << endl;

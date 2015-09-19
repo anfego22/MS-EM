@@ -2,7 +2,7 @@ CC=g++
 LIBS=
 IDIR =-I/usr/include/boost -I/usr/include/eigen3
 CFLAGS= -w -ggdb -fdiagnostics-color=auto
-OBJ = main.o Parameters.o randomsNumb.o ModelData.o
+OBJ = main.o Parameters.o randomsNumb.o ModelData.o Smooth.o
 DEP = EM_Classes.h RN_Class.h
 all: MS
 

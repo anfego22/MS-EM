@@ -37,7 +37,7 @@ Data::Data(const MatrixXd & y):
 	k = 0;
 }
 
-void Data::embed(MatrixXd &Result, const MatrixXd &Y,
+void embed(MatrixXd &Result, const MatrixXd &Y,
 				  int m){
 	const int M = Y.cols();
 	MatrixXd ytm(Y.rows()-m, Y.cols());

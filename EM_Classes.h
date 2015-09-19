@@ -11,6 +11,8 @@ using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using namespace std;
 
+void embed(MatrixXd &,const MatrixXd &,int);
+
 class Model {
 public:
 	int N, Nm, lagsY, lagsX;
@@ -31,8 +33,6 @@ public:
 	Data(const MatrixXd & ,
 		 const MatrixXd & );
 	Data(const MatrixXd & );
-	void embed(MatrixXd &,
-			   const MatrixXd &,int);
 };
 
 class Transitions{
@@ -80,10 +80,10 @@ class Errors {
 public:
 	int T, Nm;
 	const Model &model;
-	const Model &data;
+	const Data &data;
 	const Parameters &param;
-	MatrixXd eta, Y, Yt1, X, means;
-	Errors(const Parameters &param);
+	MatrixXd eta, Y, Yt1t, X, means;
+	Errors(const Parameters &);
 	void designMatrix();
 	int permFun(const int &, int ,
 				const int &);
