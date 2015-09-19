@@ -56,17 +56,7 @@ int main(){
 	cout << "What happend if we embed a matrix with 0" << endl;
 	cout << resX << endl;
 
-	MatrixXd &SigmaJ = myParam.lin.sigma[0];
-	MatrixXd &beta1 = myParam.lin.betaY[0];
-	MatrixXd etaRow;
-	MuJ = resY.rightCols(resY.cols() - myData.Y.cols())*beta1.transpose(); 
-	cout << "MuJ*Yt1t" <<endl;
-	cout << MuJ << endl;
-	etaRow.setZero(1, resY.rows());
-	multivariateNormal_density(etaRow,
-							   resY.leftCols(myData.Y.cols()),
-							   MuJ, SigmaJ);
-	cout << "This is the first row of eta" << endl;
-	cout << etaRow << endl;
+
+	
 }
 

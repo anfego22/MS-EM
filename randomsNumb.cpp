@@ -33,7 +33,7 @@ double randomNb::varCovRg(double c){
 	}
 }
 
-double multivariateNormal_density(const MatrixXd &x,
+double double_multivariateNormal_density(const MatrixXd &x,
 	const MatrixXd &Mu, const MatrixXd &Sigma){
 	double expTerm, o;
 	using namespace std;
@@ -46,11 +46,16 @@ double multivariateNormal_density(const MatrixXd &x,
 	return o*expTerm;
 }
 
-void multivariateNormal_density(VectorXd &res,const MatrixXd &x,
+VectorXd multivariateNormal_density(const MatrixXd &x,
 	const MatrixXd &Mu, const MatrixXd &Sigma){
-	res.setZero(x.rows());
-	for(int i = 0; i<x.rows(); i++){
-		res(i) = multivariateNormal_density(x.row(i), Mu.row(i),
-											  Sigma);
-	}
+	if ( x.rows() != Mu.rows())
+		std::cerr << "ERROR: X_ROWS != MU_ROWS" << std::endl;
+	VectorXd res;
+	int T = x.rows();
+	res.setZero(T);
+		for(int i = 0; i<x.rows(); i++){
+			res(i) = double_multivariateNormal_density(x.row(i),
+												Mu.row(i),
+												Sigma);
+		}
 }

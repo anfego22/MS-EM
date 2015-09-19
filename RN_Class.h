@@ -25,14 +25,13 @@ public:
 	static double varCovRg(double);
 };
 
-double multivariateNormal_density(const MatrixXd &,
-								  const MatrixXd &,
-								  const MatrixXd &);
+double double_multivariateNormal_density(const MatrixXd &,
+										 const MatrixXd &,
+										 const MatrixXd &);
 
 
-void multivariateNormal_density(VectorXd &,
-								const MatrixXd &,
-								const MatrixXd &,
-								const MatrixXd &);
+VectorXd multivariateNormal_density(const MatrixXd &,
+									const MatrixXd &,
+									const MatrixXd &);
 
 #endif
