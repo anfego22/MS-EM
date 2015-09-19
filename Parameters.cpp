@@ -124,7 +124,9 @@ void linearParams::createB(){
 }
 
 void linearParams::createMu(){
-	mu.setRandom(model.N, data.M);
+	int N;
+	N = (model.mean == true) ? model.N:1;
+	mu.setRandom(N, data.M);
 }
 	
 linearParams::linearParams(const Model &model,

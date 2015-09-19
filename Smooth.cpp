@@ -37,10 +37,11 @@ void Errors::meansF(){
 			means.row(i) = (Phi*muJ).transpose();
 		}
 	}
+	means = param.lin.mu;
 }
 
 void Errors::designMatrix(){
-	embed(Y, param.data.Y, param.model.lagsY); // 
+	embed(Y, param.data.Y, param.model.lagsY);  
 	Yt1t = Y.rightCols(Y.cols()-data.M);
 	Y = Y.leftCols(data.M);
 	T = Y.rows();
@@ -53,6 +54,41 @@ void Errors::designMatrix(){
 	}
 }
 
+void Errors::createEta(){
+	MatrixXd MuJ;
+	for (int j = 0, i = 0; j < model.Nm; j++, i++){
+		if(i >= model.Nm)
+			i = 0;
+		
+		if (model.betaX){
+			MuJ = Yt1t*param.lin.betaY[i].transpose()
+				+ X*param.lin.betaX[i].transpose();
+		} else {
+				MuJ = Yt1t*param.lin.betaY[i].transpose()
+				+ X*param.lin.betaX[0].transpose();
+		}
+		if (model.mean){
+			for(int h = 0; h < MuJ.rows(); h++){
+				MuJ.row(h) += means.row(j);
+			}
+		} else{
+			for(int h = 0; h < MuJ.rows(); h++){
+				MuJ.row(h) += means;
+			}
+		}
+		if (model.sigma){
+			eta.row(j) = multivariateNormal_density(Y, MuJ,
+													param.lin.sigma[i]);
+		} else{
+			eta.row(j) = multivariateNormal_density(Y, MuJ,
+													param.lin.sigma[0]);
+		}
+		
+	}
+}
+
+
+
 Errors::Errors(const Parameters &param):param(param),
 										model(param.model),
 										data(param.data){
@@ -62,20 +98,6 @@ Errors::Errors(const Parameters &param):param(param),
 	meansF();
 	eta.setZero(model.Nm, T);		   
 	// 
-	MatrixXd MuJ;
-	for (int j = 0, i = 0; j < model.Nm; j++, i++){
-		if(i >= model.N)
-			i = 0;
-
-		MuJ = Yt1t*param.lin.betaY[i].transpose()
-			+ X*param.lin.betaX[i].transpose();
-		for(int h = 0; h < MuJ.rows(); h++){
-			MuJ.row(h) += means.row(j);
-		}
-		
-		eta.row(j) = multivariateNormal_density(Y, MuJ,
-												param.lin.sigma[i]);
-	}
-
+	createEta();
 }
 

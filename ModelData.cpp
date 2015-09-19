@@ -1,10 +1,10 @@
 #include "EM_Classes.h"
 
 Model::Model(const int &N_, const int &lagsY_,
-			 const int &lagsX_,
+			 const int &lagsX_, const bool &mean_,
 			 const bool &sigma_, const bool &betaY_,
 			 const bool &betaX_, const bool &meanCorrected):
-	N(N_), lagsY(lagsY_), lagsX(lagsX_),
+	N(N_), lagsY(lagsY_), lagsX(lagsX_), mean(mean_),
 	sigma(sigma_), betaY(betaY_),
 	betaX(betaX_), meanCorrected(meanCorrected){
 	Nm = (meanCorrected == true) ? std::pow(N, lagsY + 1):N;

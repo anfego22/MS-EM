@@ -8,7 +8,8 @@ using Eigen::MatrixXd;
 int main(){
 	int lagsY = 2;
 	int lagsX = 0;
-	Model myModel(2, lagsY, lagsX, true, true, true, true);
+	//                             betaY,betaX,Sigma,meanCorrected
+	Model myModel(2, lagsY, lagsX, true, true, true, false);
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
 	Eigen::Matrix<double, 2, 10> Y;
