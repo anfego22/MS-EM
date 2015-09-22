@@ -6,7 +6,7 @@ using Eigen::MatrixXd;
 
 
 int main(int argc, char *argv[]){
-	vector<int> parInt = {2, 2, 0};
+	vector<int> parInt = {2, 1, 1};
 	//                      mean, sigma,betaY,betaX,meanCorrec
 	vector<bool> parBool = {true, true, true, true, true};
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 	Eigen::Matrix<double, 2, 10> X;
 	Y.setRandom();
 	X.setRandom();
-	Data myData(Y, X);
+	Data myData(Y);
 	cout << "This is Y" << endl;
 	cout << Y << endl;
 	cout << "This is X" << endl;
@@ -73,9 +73,12 @@ int main(int argc, char *argv[]){
 	MatrixXd resY, resX, MuJ;
 	embed(resY, myData.Y, parInt[1]);
 	cout << resY << endl;
-	embed(resX, myData.X, parInt[2]);
-	cout << "What happend if we embed a matrix with 0" << endl;
-	cout << resX << endl;
+	if (myData.k){
+		embed(resX, myData.X, parInt[2]);
+		cout << "What happend if we embed a matrix with 0" << endl;
+		cout << resX << endl;
+	} else
+		cout << "There is no X" << endl;
 
 	Errors err(myParam);
 	cout << "This is eta" << endl;
