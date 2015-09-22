@@ -112,7 +112,7 @@ void linearParams::createB(){
 	}
 	if(data.k){
 		for (int i = 0; i<Nx; i++){
-			beX.setRandom(data.M, data.k);
+			beX.setRandom(data.M, data.k*(model.lagsX+1));
 			beX.unaryExpr(std::ptr_fun(rnb.sampleCauchy));
 			betaX.push_back(beX);
 		}
