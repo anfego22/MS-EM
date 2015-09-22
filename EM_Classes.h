@@ -89,7 +89,16 @@ public:
 	int permFun(const int &, int ,
 				const int &);
 	void meansF();
+	void addMeans(const int &, MatrixXd &);
+	void createMuJ(const MatrixXd &, const MatrixXd &,
+				   MatrixXd &);
+	void createMuJ(const MatrixXd &, const MatrixXd &,
+				   const MatrixXd &, const MatrixXd &,
+				   MatrixXd &);
+	void createMuJ(const int &, const int &,
+				   MatrixXd &);
 	void createEta();
+	
 };
 
 class Xi {
