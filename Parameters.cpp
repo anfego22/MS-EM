@@ -63,8 +63,6 @@ void Transitions::updateRho(const MatrixXd & XiS){
 	rho = XiS.row(0);
 }
 
-
-
 Transitions::Transitions(const Model &model): model(model){
 	N = model.N;
 	Nm = model.Nm;

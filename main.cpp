@@ -5,11 +5,31 @@ using namespace std;
 using Eigen::MatrixXd;
 
 
-int main(){
-	int lagsY = 2;
-	int lagsX = 0;
-	//                             betaY,betaX,Sigma,meanCorrected
-	Model myModel(2, lagsY, lagsX, true, true, true, false);
+int main(int argc, char *argv[]){
+	vector<int> parInt = {2, 2, 0};
+	//                      mean, sigma,betaY,betaX,meanCorrec
+	vector<bool> parBool = {true, true, true, true, true};
+
+	if ( argc > 1){
+		for (int i = 0; i < argc-1; i++){
+			if (i <= 2)
+				parInt[i] = atoi(argv[i+1]);
+			else{
+				if (argv[i+1] == "t" | argv[i+1] == "T")
+					parBool[i-3] = true;
+			else 
+				parBool[i-3] = false;
+			}
+		}
+	}
+	
+    //                             
+
+
+	Model myModel(parInt[0], parInt[1], parInt[2],
+				  parBool[0], parBool[1], parBool[2],
+				  parBool[3], parBool[4]);
+	
 	cout << "This is N^{m+1}" << endl;
 	cout << myModel.Nm << endl;
 	Eigen::Matrix<double, 2, 10> Y;
@@ -51,9 +71,9 @@ int main(){
 	cout << "Y_t\t" << "Y_{t-1}\t\t" << endl;
 
 	MatrixXd resY, resX, MuJ;
-	embed(resY, myData.Y, lagsY);
+	embed(resY, myData.Y, parInt[1]);
 	cout << resY << endl;
-	embed(resX, myData.X, lagsX);
+	embed(resX, myData.X, parInt[2]);
 	cout << "What happend if we embed a matrix with 0" << endl;
 	cout << resX << endl;
 

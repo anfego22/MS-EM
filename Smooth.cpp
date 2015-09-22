@@ -31,13 +31,13 @@ void Errors::meansF(){
 				muJ.middleRows(j*data.M, data.M) =
 					param.lin.mu.row(sel).transpose();
 			}
-
 			Phi << MatrixXd::Identity(data.M, data.M),
 				param.lin.betaY[sel0];
 			means.row(i) = (Phi*muJ).transpose();
 		}
-	}
-	means = param.lin.mu;
+	} else 
+		means = param.lin.mu;
+	
 }
 
 void Errors::designMatrix(){
@@ -57,14 +57,13 @@ void Errors::designMatrix(){
 void Errors::createEta(){
 	MatrixXd MuJ;
 	for (int j = 0, i = 0; j < model.Nm; j++, i++){
-		if(i >= model.Nm)
+		if(i >= model.N)
 			i = 0;
-		
 		if (model.betaX){
 			MuJ = Yt1t*param.lin.betaY[i].transpose()
 				+ X*param.lin.betaX[i].transpose();
 		} else {
-				MuJ = Yt1t*param.lin.betaY[i].transpose()
+			MuJ = Yt1t*param.lin.betaY[i].transpose()
 				+ X*param.lin.betaX[0].transpose();
 		}
 		if (model.mean){
