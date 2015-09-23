@@ -18,13 +18,12 @@ int Errors:: permFun(const int &N, int i,
 
 // This function makes a (N^{m+1}Mx1) elements 
 void Errors::meansF(){
-	if(model.meanCorrected){
+	if(model.meanCorrected == true & model.mean == true){
 		means.setZero(model.Nm, data.M);
 		int sel0, sel;
 		MatrixXd Phi, muJ;
 		Phi.setZero(data.M, data.M*(model.lagsY +1));
 		muJ.setZero(data.M*(model.lagsY +1), 1);
-		
 		for (int i = 0; i < model.Nm; i++){
 			sel0 = permFun(model.N, i, 0);
 
@@ -39,9 +38,9 @@ void Errors::meansF(){
 			means.row(i) = (Phi*muJ).transpose();
 			
 		}
-	} else 
+	}
+	if (model.mean == false)
 		means = param.lin.mu;
-	
 }
 
 void Errors::designMatrix(){
