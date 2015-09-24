@@ -6,16 +6,16 @@ using Eigen::MatrixXd;
 
 
 int main(int argc, char *argv[]){
-	vector<int> parInt = {2, 1, 1};
+	vector<int> parInt = {2, 0, 0};
 	//                      mean, sigma,betaY,betaX,meanCorrec
-	vector<bool> parBool = {true, true, true, true, true};
-
+	vector<bool> parBool = {false, false, true, true, true};
+	
 	if ( argc > 1){
 		for (int i = 0; i < argc-1; i++){
 			if (i <= 2)
 				parInt[i] = atoi(argv[i+1]);
 			else{
-				if (argv[i+1] == "t" | argv[i+1] == "T")
+				if (atoi(argv[i+1]) == 1)
 					parBool[i-3] = true;
 			else 
 				parBool[i-3] = false;
@@ -24,8 +24,11 @@ int main(int argc, char *argv[]){
 	}
 	
     //                             
-
-
+	cout << "The call model is call with" << endl;
+	cout << parInt[0] << parInt[1] << parInt[2]<< endl;
+	cout << "and the switching" << endl;
+	cout << parBool[0] << parBool[1] << parBool[2]  << parBool[3] << parBool[4] << endl;
+	
 	Model myModel(parInt[0], parInt[1], parInt[2],
 				  parBool[0], parBool[1], parBool[2],
 				  parBool[3], parBool[4]);
@@ -36,7 +39,7 @@ int main(int argc, char *argv[]){
 	Eigen::Matrix<double, 2, 10> X;
 	Y.setRandom();
 	X.setRandom();
-	Data myData(Y);
+	Data myData(Y, X);
 	cout << "This is Y" << endl;
 	cout << Y << endl;
 	cout << "This is X" << endl;
@@ -52,6 +55,8 @@ int main(int argc, char *argv[]){
 	cout << myParam.rhoF.rho.sum() << endl;
 	cout << "This is F" << endl;
 	cout << myParam.rhoF.F << endl << endl;
+	cout << "Take a look at mu" << endl;
+	cout << myParam.lin.mu << endl;
 	cout << "Take a look at sigma" << endl;
 	for (int i = 0; i< myParam.lin.sigma.size(); i++){
 		cout << myParam.lin.sigma[i] << endl;
@@ -69,7 +74,7 @@ int main(int argc, char *argv[]){
 	}
 	cout << "Take a look at the design matrix" << endl;
 	cout << "Y_t\t" << "Y_{t-1}\t\t" << endl;
-
+	
 	MatrixXd resY, resX, MuJ;
 	embed(resY, myData.Y, parInt[1]);
 	cout << resY << endl;
