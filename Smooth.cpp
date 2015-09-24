@@ -66,7 +66,8 @@ void Errors::addMeans(const int &j,MatrixXd &MuJ){
 		}
 	} else{
 		for(int h = 0; h < MuJ.rows(); h++){
-			MuJ.row(h) += means;
+			MuJ.row(h) = MuJ.row(h) + means;
+			
 		}
 	}
 }
@@ -85,18 +86,15 @@ void Errors::createMuJ(const MatrixXd &Y, const MatrixXd &betaY,
 
 void Errors::createMuJ(const int &i, const int &j,
 					   MatrixXd &MuJ){
+	int iX, iY;
+	iX = (model.betaX == true) ? i:0;
+	iY = (model.betaY == true) ? i:0;
 	if (data.k){
-		if (model.betaX){
-			createMuJ(Yt1t, param.lin.betaY[i],
-					  X, param.lin.betaX[i], MuJ);
+			createMuJ(Yt1t, param.lin.betaY[iY],
+					  X, param.lin.betaX[iX], MuJ);
 			addMeans(j, MuJ);
-		} else {
-			createMuJ(Yt1t, param.lin.betaY[i],
-					  X, param.lin.betaX[0], MuJ);
-			addMeans(j, MuJ);
-		}
 	} else {
-		createMuJ(Yt1t, param.lin.betaY[i], MuJ);
+		createMuJ(Yt1t, param.lin.betaY[iY], MuJ);
 		addMeans(j, MuJ);
 	}
 }
@@ -107,13 +105,9 @@ void Errors::createEta(){
 		if(i >= model.N)
 			i = 0;
 		createMuJ(i, j, MuJ);
-		if (model.sigma){
-			eta.row(j) = multivariateNormal_density(Y, MuJ,
-													param.lin.sigma[i]);
-		} else{
-			eta.row(j) = multivariateNormal_density(Y, MuJ,
-													param.lin.sigma[0]);
-		}
+		int iS = (model.sigma == true) ? i:0;
+		eta.row(j) = multivariateNormal_density(Y, MuJ,
+												param.lin.sigma[iS]);
 	}
 }
 
