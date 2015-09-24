@@ -89,7 +89,9 @@ int main(int argc, char *argv[]){
 	cout << "This is eta" << endl;
 	cout << err.eta << endl;
 
-
+	Xi xi(err);
+	cout << "This is XiS" << endl;
+	cout << xi.XiS << endl;
 	
 }
 

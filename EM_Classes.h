@@ -103,10 +103,15 @@ public:
 
 class Xi {
 public:
-	MatrixXd Xitt, Xit1t, XiS;
-	Xi(const Errors &, const Parameters &);
-	void filterProb(const Errors &, const Parameters &);
-	void smoothProb(const Errors &, const Parameters &);
+	const Model &model;
+	const Data &data;
+	const Parameters &param;
+	const Errors &errors;
+	double logLike;
+	MatrixXd Xitt, Xit1t, XiS, llikel;
+	Xi(const Errors &);
+	void filterProb();
+	void smoothProb();
 };
 
 class EM{
