@@ -60,7 +60,7 @@ void Transitions::updateF(const MatrixXd & Xitt, const MatrixXd & Xit1t, const M
 }
 
 void Transitions::updateRho(const MatrixXd & XiS){
-	rho = XiS.row(0);
+	rho = XiS.col(0);
 }
 
 Transitions::Transitions(const Model &model): model(model){
