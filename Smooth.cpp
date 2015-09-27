@@ -3,7 +3,6 @@
 
 using Eigen::MatrixXd;
 
-
 /* This Functions takes an integer number with range
    0:(N^{m+1}-1) and other integer j with range
    0:m. It returns the state of mu_{s*_{t}} that correspond
@@ -19,7 +18,7 @@ int Errors:: permFun(const int &N, int i,
 
 // This function makes a (N^{m+1}Mx1)elements with the mu
 void Errors::meansF(){
-	if(model.meanCorrected == true & model.mean == true){
+	if(model.meanCorrected == true){
 		means.setZero(model.Nm, data.M);
 		int sel0, sel;
 		MatrixXd Phi, muJ;
@@ -27,11 +26,11 @@ void Errors::meansF(){
 		muJ.setZero(data.M*(model.lagsY +1), 1);
 		// This should be grouped in a function
 		for (int i = 0; i < model.Nm; i++){
-			
 			sel0 = (model.betaY == true) ?
 				permFun(model.N, i, 0):0;
 			for (int j = 0; j < model.lagsY; j++){
-				sel = permFun(model.N, i, j);
+				sel =(model.mean == true) ?
+					permFun(model.N, i, j):0;
 				muJ.middleRows(j*data.M, data.M) =
 					param.lin.mu.row(sel).transpose();
 			}
@@ -39,9 +38,8 @@ void Errors::meansF(){
 				param.lin.betaY[sel0];
 			means.row(i) = (Phi*muJ).transpose();
 		}
-
 	}
-	if (model.mean == false)
+	else
 		means = param.lin.mu;
 }
 
@@ -50,25 +48,20 @@ void Errors::designMatrix(){
 	Yt1t = Y.rightCols(Y.cols()-data.M);
 	Y = Y.leftCols(data.M);
 	T = Y.rows();
-
 	if(data.k){
-		
 		embed(X, param.data.X, param.model.lagsX);
-		
 		if( T < X.rows()){
 			X = X.topRows(T);
 		}
-		
 		if(T > X.rows()){
 			cerr << "ERROR: X_ROWS < Y_ROWS" << endl; 
 		}
-		
 	}
-	
 }
 
 // 
 void Errors::addMeans(const int &j,MatrixXd &MuJ){
+	/*
 	if (model.mean){
 		for(int h = 0; h < MuJ.rows(); h++){
 			MuJ.row(h) += means.row(j);
@@ -78,6 +71,11 @@ void Errors::addMeans(const int &j,MatrixXd &MuJ){
 			MuJ.row(h) = MuJ.row(h) + means;
 			
 		}
+	}*/
+	int h2 = (j>means.rows() == true) ? 0:j;
+	for(int h = 0; h < MuJ.rows(); h++){
+		
+		MuJ.row(h) += means.row(h2);
 	}
 }
 
