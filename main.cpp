@@ -90,8 +90,24 @@ int main(int argc, char *argv[]){
 	cout << err.eta << endl;
 
 	Xi xi(err);
+	cout << "This is Xitt" << endl;
+	cout << xi.Xitt << endl;
+	cout << "This is Xit1t" << endl;
+	cout << xi.Xit1t << endl;
 	cout << "This is XiS" << endl;
 	cout << xi.XiS << endl;
-	
+
+	cout << "This is F\n";
+	cout << myParam.rhoF.F << endl;
+	cout << "This is F updated \n";
+	myParam.rhoF.updateF(xi.Xitt, xi.Xit1t, xi.XiS);
+	cout << myParam.rhoF.F << endl;
+
+
+	cout << "This is rho\n";
+	cout << myParam.rhoF.rho << endl;
+	cout << "This is rho updated \n";
+	myParam.rhoF.updateRho(xi.XiS);
+	cout << myParam.rhoF.rho << endl;
 }
 
