@@ -9,6 +9,7 @@ using Eigen::MatrixXd;
    0:m. It returns the state of mu_{s*_{t}} that correspond
    to mu_{s_{t-j}}. */
 
+// Should be inline !!
 int Errors:: permFun(const int &N, int i,
 					 const int &j){
 	i = i/pow(N, j);
@@ -16,7 +17,7 @@ int Errors:: permFun(const int &N, int i,
 	return i;
 }
 
-// This function makes a (N^{m+1}Mx1) elements 
+// This function makes a (N^{m+1}Mx1)elements with the mu
 void Errors::meansF(){
 	if(model.meanCorrected == true & model.mean == true){
 		means.setZero(model.Nm, data.M);
@@ -24,20 +25,21 @@ void Errors::meansF(){
 		MatrixXd Phi, muJ;
 		Phi.setZero(data.M, data.M*(model.lagsY +1));
 		muJ.setZero(data.M*(model.lagsY +1), 1);
+		// This should be grouped in a function
 		for (int i = 0; i < model.Nm; i++){
-			sel0 = permFun(model.N, i, 0);
-
+			
+			sel0 = (model.betaY == true) ?
+				permFun(model.N, i, 0):0;
 			for (int j = 0; j < model.lagsY; j++){
 				sel = permFun(model.N, i, j);
 				muJ.middleRows(j*data.M, data.M) =
 					param.lin.mu.row(sel).transpose();
 			}
-			
 			Phi << MatrixXd::Identity(data.M, data.M),
 				param.lin.betaY[sel0];
 			means.row(i) = (Phi*muJ).transpose();
-			
 		}
+
 	}
 	if (model.mean == false)
 		means = param.lin.mu;
@@ -48,17 +50,24 @@ void Errors::designMatrix(){
 	Yt1t = Y.rightCols(Y.cols()-data.M);
 	Y = Y.leftCols(data.M);
 	T = Y.rows();
+
 	if(data.k){
+		
 		embed(X, param.data.X, param.model.lagsX);
+		
 		if( T < X.rows()){
 			X = X.topRows(T);
 		}
+		
 		if(T > X.rows()){
 			cerr << "ERROR: X_ROWS < Y_ROWS" << endl; 
 		}
+		
 	}
+	
 }
 
+// 
 void Errors::addMeans(const int &j,MatrixXd &MuJ){
 	if (model.mean){
 		for(int h = 0; h < MuJ.rows(); h++){
