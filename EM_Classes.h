@@ -6,7 +6,6 @@
 #include "Eigen/Dense"
 #include <iostream>
 
-
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using namespace std;
@@ -103,12 +102,14 @@ public:
 
 class Xi {
 public:
+	int Nm;
 	const Model &model;
 	const Data &data;
 	const Parameters &param;
 	const Errors &errors;
 	double logLike;
-	MatrixXd Xitt, Xit1t, XiS, llikel;
+	MatrixXd Xitt, Xit1t, XiS;
+	VectorXd llikel;
 	Xi(const Errors &);
 	void filterProb();
 	void smoothProb();

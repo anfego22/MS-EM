@@ -72,7 +72,7 @@ void Errors::addMeans(const int &j,MatrixXd &MuJ){
 			
 		}
 	}*/
-	int h2 = (j>means.rows() == true) ? 0:j;
+	int h2 = (j>=means.rows() == true) ? 0:j;
 	for(int h = 0; h < MuJ.rows(); h++){
 		
 		MuJ.row(h) += means.row(h2);
