@@ -88,7 +88,7 @@ public:
 	int permFun(const int &, int ,
 				const int &);
 	void meansF();
-	void addMeans(const int &, MatrixXd &);
+	void addMeans(int , MatrixXd &);
 	void createMuJ(const MatrixXd &, const MatrixXd &,
 				   MatrixXd &);
 	void createMuJ(const MatrixXd &, const MatrixXd &,
